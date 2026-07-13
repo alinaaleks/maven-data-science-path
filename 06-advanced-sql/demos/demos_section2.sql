@@ -55,8 +55,18 @@ WHERE hs.country IS NULL;
 
         
 -- 3. Joining on multiple columns
+SELECT * FROM happiness_scores;
+SELECT * FROM inflation_rates;
 
-
+SELECT COUNT(*)
+FROM happiness_scores hs
+	INNER JOIN inflation_rates ir
+    ON hs.country = ir.country_name AND hs.year = ir.year;
+    
+SELECT *
+FROM happiness_scores hs
+	INNER JOIN inflation_rates ir
+    ON hs.country = ir.country_name AND hs.year = ir.year;
         
 -- 4. Joining multiple tables
 
