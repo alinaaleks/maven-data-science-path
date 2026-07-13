@@ -98,15 +98,37 @@ INSERT INTO employees (employee_id, employee_name, salary, manager_id) VALUES
 SELECT * FROM employees;
 
 -- Employees with the same salary
-
-
+SELECT	*
+FROM	employees e1
+		INNER JOIN employees e2
+			ON e1.salary = e2.salary
+WHERE	e1.employee_name <> e2.employee_name
+		AND e1.employee_id > e2.employee_id; -- trick to remove duplicate pairs
+        
+-- or even cleaner (remove not equal condition because 2nd part already assumes it):
+SELECT	e1.employee_id, e1.employee_name, e1.salary,
+		e2.employee_id, e2.employee_name, e2.salary
+FROM	employees e1
+		INNER JOIN employees e2
+			ON e1.salary = e2.salary
+WHERE	e1.employee_id > e2.employee_id;
 
 -- Employees that have a greater salary
-
-
+SELECT	e1.employee_id, e1.employee_name, e1.salary,
+		e2.employee_id, e2.employee_name, e2.salary
+FROM	employees e1
+		INNER JOIN employees e2
+			ON e1.salary > e2.salary
+ORDER BY e1.employee_id;
 
 -- Employees and their managers
+SELECT * FROM employees;
 
+SELECT	e1.employee_id, e1.employee_name, e1.manager_id,
+		e2.employee_name AS manager_name
+FROM 	employees e1
+		LEFT JOIN employees e2
+			ON e1.manager_id = e2.employee_id;
 
         
 -- 6. Cross joins
