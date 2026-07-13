@@ -162,11 +162,12 @@ INSERT INTO outerwear (id, item) VALUES
 	(4, 'Coat');
     
 -- View the tables
-
-
+SELECT * FROM tops;
+SELECT * FROM sizes;
 
 -- Cross join the tables
-
+SELECT	*
+FROM	tops CROSS JOIN  sizes;
 
 
 -- From the self join assignment:
