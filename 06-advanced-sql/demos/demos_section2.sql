@@ -169,27 +169,29 @@ SELECT * FROM sizes;
 SELECT	*
 FROM	tops CROSS JOIN  sizes;
 
-
--- From the self join assignment:
--- Which products are within 25 cents of each other in terms of unit price?
-
-
-        
--- Rewritten with a CROSS JOIN
-
-
-
 -- 7. Union vs union all
+SELECT * FROM tops;
+SELECT * FROM outerwear;
 
+-- Union (REMOVES DUPLICATES)
+SELECT * FROM tops
+UNION
+SELECT * FROM outerwear;
 
-
--- Union
-
-
-
--- Union all
-
+-- Union all (KEEPS DUPLICATES, RUNS FASTER THAN UNION)
+SELECT * FROM tops
+UNION ALL
+SELECT * FROM outerwear;
 
 
 -- Union with different column names
+SELECT * FROM happiness_scores;
+SELECT * FROM happiness_scores_current; -- for year 2024
 
+SELECT DISTINCT year
+FROM happiness_scores;
+
+SELECT year, country, happiness_score FROM happiness_scores
+UNION ALL
+SELECT 2024, country, ladder_score FROM happiness_scores_current; -- 1) COLUMNS SHOULD HAVE SAME DATA TYPES
+-- 2) just putting 2024 there it fills all rows with this value
