@@ -22,15 +22,35 @@ ORDER BY unit_price DESC;
 
 -- Return the factories, product names from the factory
 -- and number of products produced by each factory
+SELECT	factory, COUNT(product_id) AS num_products
+FROM	products
+GROUP BY factory;
 
+SELECT	p.factory, p.product_name,
+		factory_products.num_products
+FROM	products p LEFT JOIN
+		(SELECT	factory, COUNT(product_id) AS num_products
+		 FROM	products
+		 GROUP BY factory) AS factory_products
+		ON p.factory = factory_products.factory
+ORDER BY p.factory, p.product_name;
 
--- All factories and products
+-- OR
+SELECT	fp.factory, fp.product_name,
+		fn.num_products
+FROM
 
+(SELECT	factory, product_name
+FROM	products) fp 
 
--- All factories and their total number of products
+LEFT JOIN
 
+(SELECT	factory, COUNT(product_id) AS num_products
+FROM	products
+GROUP BY factory) AS fn
 
--- Final query with subqueries
+ON fp.factory = fn.factory
+ORDER BY fp.factory, fp.product_name;
 
 
 -- ASSIGNMENT 3: Subqueries in the WHERE clause
