@@ -85,20 +85,41 @@ FROM	(SELECT year, country, happiness_score FROM happiness_scores
 WHERE	happiness_score > avg_hs_by_country + 1;
 
 -- 4. Subqueries in the WHERE and HAVING clauses
+SELECT * FROM happiness_scores;
 
 -- Average happiness score
+SELECT AVG(happiness_score) FROM happiness_scores;
 
 -- Above average happiness scores (WHERE)
+SELECT		year, country, happiness_score
+FROM		happiness_scores
+WHERE		happiness_score > (SELECT AVG(happiness_score) FROM happiness_scores)
+ORDER BY	happiness_score;
 
 -- Above average happiness scores for each region (HAVING)
+SELECT		region, AVG(happiness_score) AS avg_hs
+FROM		happiness_scores
+GROUP BY	region
+HAVING		avg_hs > (SELECT AVG(happiness_score) FROM happiness_scores)
+ORDER BY	avg_hs;
 
 -- 5. ANY vs ALL
+SELECT * FROM happiness_scores; -- 2015-2023
+SELECT * FROM happiness_scores_current; -- 2024
 
 -- Scores that are greater than ANY 2024 scores
-            
+SELECT	*
+FROM	happiness_scores
+WHERE	happiness_score >
+		ANY(SELECT	ladder_score
+			FROM	happiness_scores_current); -- greater than the smallest ladder_score in 2024
 
 -- Scores that are greater than ALL 2024 scores
-
+SELECT	*
+FROM	happiness_scores
+WHERE	happiness_score >
+		ALL(SELECT	ladder_score
+			FROM	happiness_scores_current); -- greated than the greatest ladder_score in 2024
 
 -- 6. EXISTS
 
