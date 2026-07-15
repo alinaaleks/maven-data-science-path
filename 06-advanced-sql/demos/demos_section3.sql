@@ -122,11 +122,22 @@ WHERE	happiness_score >
 			FROM	happiness_scores_current); -- greated than the greatest ladder_score in 2024
 
 -- 6. EXISTS
+SELECT * FROM inflation_rates;
 
 /* Return happiness scores of countries
 that exist in the inflation rates table */
+SELECT	*
+FROM	happiness_scores h
+WHERE	EXISTS (
+		SELECT	i.country_name
+        FROM	inflation_rates i
+        WHERE	i.country_name = h.country);
 
 -- Alternative to EXISTS: INNER JOIN
+SELECT	*
+FROM	happiness_scores h
+		INNER JOIN inflation_rates i
+			ON h.year = i.year AND h.country = i.country_name;
      
 -- 7. CTEs: Readability
 
