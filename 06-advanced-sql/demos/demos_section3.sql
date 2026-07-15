@@ -143,15 +143,55 @@ FROM	happiness_scores h
 
 /* SUBQUERY: Return the happiness scores along with
    the average happiness score for each country */
+SELECT	hs.year, hs.country, hs.happiness_score,
+		country_hs.avg_hs_by_country
+FROM	happiness_scores hs LEFT JOIN
+		(SELECT	country,
+				AVG(happiness_score) AS avg_hs_by_country
+		 FROM	happiness_scores
+		 GROUP BY country) AS country_hs
+		ON hs.country = country_hs.country;
 
 /* CTE: Return the happiness scores along with
    the average happiness score for each country */
+WITH	country_hs AS (SELECT		country,
+								AVG(happiness_score) AS avg_hs_by_country
+					FROM		happiness_scores
+					GROUP BY 	country)
+   
+SELECT	hs.year, hs.country, hs.happiness_score,
+		cs.avg_hs_by_country
+FROM	happiness_scores hs
+		LEFT JOIN country_hs cs
+		ON hs.country = cs.country;
    
 -- 8. CTEs: Reusability
         
 -- SUBQUERY: Compare the happiness scores within each region in 2023
+SELECT * FROM happiness_scores WHERE year = 2023;
+
+SELECT	hs1.region, hs1.country, hs1.happiness_score,
+		hs2.country, hs2.happiness_score
+FROM	happiness_scores hs1 INNER JOIN happiness_scores hs2
+		ON hs1.region = hs2.region
+WHERE	hs1.year = 2023 AND hs2.year = 2023 AND hs1.country < hs2.country;
+
+SELECT	hs1.region, hs1.country, hs1.happiness_score,
+		hs2.country, hs2.happiness_score
+FROM	(SELECT * FROM happiness_scores WHERE year = 2023) hs1
+		INNER JOIN
+        (SELECT * FROM happiness_scores WHERE year = 2023) hs2
+		ON hs1.region = hs2.region
+WHERE	hs1.country < hs2.country;
 
 -- CTE: Compare the happiness scores within each region in 2023
+WITH hs AS (SELECT * FROM happiness_scores WHERE year = 2023)
+
+SELECT	hs1.region, hs1.country, hs1.happiness_score,
+		hs2.country, hs2.happiness_score
+FROM	hs hs1 INNER JOIN hs hs2
+		ON hs1.region = hs2.region
+WHERE	hs1.country < hs2.country;
 
 -- 9. Multiple CTEs
 
