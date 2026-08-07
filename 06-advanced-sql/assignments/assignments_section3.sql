@@ -41,7 +41,7 @@ SELECT	fp.factory, fp.product_name,
 FROM
 
 (SELECT	factory, product_name
-FROM	products) fp 
+FROM	products) AS fp 
 
 LEFT JOIN
 
@@ -77,7 +77,6 @@ WHERE	unit_price < 3.25
 ORDER BY unit_price DESC;
 
 -- ASSIGNMENT 4: CTEs
-
 -- View the orders and products tables
 SELECT * FROM orders;
 SELECT * FROM products;
@@ -89,7 +88,6 @@ SELECT	o.order_id, o.product_id, o.units,
 FROM	orders o
 		LEFT JOIN products p
         ON o.product_id = p.product_id;
-
 
 -- Return all orders over $200
 WITH	total_amounts AS(
@@ -106,14 +104,30 @@ WITH	total_amounts AS(
 SELECT	COUNT(*)
 FROM	total_amounts;
 
--- Return the number of orders over $200
-
-
 -- ASSIGNMENT 5: Multiple CTEs
-
--- Copy over Assignment 2 (Subqueries in the FROM clause) solution
-
-
 -- Rewrite the Assignment 2 subquery solution using CTEs instead
+-- Return the factories, product names from the factory
+-- and number of products produced by each factory
+WITH products_count AS (SELECT	factory, COUNT(product_id) AS num_products
+						FROM	products
+						GROUP BY factory)
 
+SELECT	p.factory, p.product_name,
+		pc.num_products
+FROM	products p LEFT JOIN products_count pc
+		ON p.factory = pc.factory
+ORDER BY p.factory, p.product_name;
+
+-- OR
+WITH	p AS (SELECT factory, product_name FROM products),
+		pc AS (SELECT	factory, COUNT(product_id) AS num_products
+						FROM	products
+						GROUP BY factory)
+
+SELECT	p.factory, p.product_name,
+		pc.num_products
+FROM	p LEFT JOIN pc
+		ON p.factory = pc.factory
+ORDER BY p.factory, p.product_name;
+-- (but I like my solution above better :))
 
